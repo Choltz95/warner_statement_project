@@ -8,7 +8,7 @@ import ATD
 ATD.setDefaultKey("warner_findoc_research")
 from enchant.checker import *
 
-def enum_errs(cleaned_text,g):
+def enum_errs(cleaned_text,g="",cs=""):
     f = open(cleaned_text)
     f_str = f.read()
     f.seek(0)
@@ -29,9 +29,12 @@ def enum_errs(cleaned_text,g):
     chkr.set_text(text)
     for err in chkr:
         if err.word[0].isupper() == False:
-            with open(cleaned_text + ".log", "w") as f:
+            with open(cleaned_text + ".log", "a+") as f:
                 f.write("spelling error for: " + "**"+err.word+"**\n")
             tot_sp += 1
+        else:
+            if cs != "":
+                f.write("spelling error for: " + "**"+err.word+"**\n")
     #print "#Total spelling errors for file: " + str(cleaned_text) + ": " + str(tot_sp)
     if g == "-g":
         for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', f_str):

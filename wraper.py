@@ -4,17 +4,31 @@ import os
 import csv
 import parse_lib
 import count_errors
-def usage():
-    print "usage: python wraper.py <data/>{mandatory} <-c cores>{optional} <-g>{optional}"
 
-def main():
+"""
+data: directory containing forms
+-g: set flag if grammar checking is needed
+-uc: set flag if case sensitivity (caped words checked)
+-c: todo get cores from command line
+"""
+def usage():
+    print "usage: python wraper.py <data/>{mandatory} <-g>{optional} <-uc>{coptional} <-c cores>{optional}"
+
+def argparse(argv):
     if len(sys.argv) < 2:
         usage()
         sys.exit(1)
+    data_dir = sys.argv[1]
+    g = "-g" if "-g" in sys.argv else ""
+    uc = "-uc" if "-uc" in sys.argv else ""
+    c = 4
+    return data_dir,g,uc,c
+
+def main():
     cleaned_text = ""
     baseline = ()
-    data_dir = sys.argv[1]
-    g = sys.argv[2] if len(sys.argv)>3 else ""
+    data_dir,g,uc,c = argparse(sys.argv)
+
     if not os.path.exists("result"):
         os.makedirs("result")
 
