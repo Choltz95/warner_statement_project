@@ -667,14 +667,12 @@ def parse_file_meta(fullpath):
         except StandardError as e:
                 header=r''
 
-
         # Accession Number
         try:
                 fmt = r'(?sm)ACCESSION NUMBER:\s+(\S+)\s*$'
                 accession_num =  re.findall(fmt,header, re.DOTALL)[0]
         except StandardError as e:
                 accession_num=r''
-
 
         # CIK Number
         try:

@@ -22,7 +22,6 @@ def parse_file_meta(fullpath):
         except StandardError as e:
                 accession_num=r''
 
-
         # CIK Number
         try:
                 fmt = r'(?sm)CENTRAL INDEX KEY:\s+(\d+)\s*$'
@@ -88,5 +87,4 @@ def parse_file_meta(fullpath):
         except StandardError as e:
                 table = r''
 
-        #baseline  = (accession_num, cik, form_type, fye, file_date, co_name, sic)
         return (accession_num,cik,form_type,fye,file_Date,co_name,sic)

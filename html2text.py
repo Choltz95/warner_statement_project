@@ -76,11 +76,11 @@ if __name__ == "__main__":
             parse_lib.unescape(line)
             for k, v in replace_mapping.iteritems():
                 line = line.replace(k, v)
+            # filter out custom phrases
             if len(line.split()) > 1 and line.find("END PRIVACY-ENHANCED MESSAGE") == -1 and line.find("exhibit") == -1 and line.find("Exhibit") == -1 and len(line) - line.count(' ') < 500:
                 filter(lambda x: x in string.printable, line)
             page+=line
         print page
 
-        #print ''.join(S)
     else:
         p.error("Too few arguments")

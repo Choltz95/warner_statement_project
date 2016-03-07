@@ -17,6 +17,7 @@ def enum_errs(cleaned_text,g="",cs=""):
     tot_sp = 0 # spelling errors
     tot_gm = -1 # grammatical errors -1 if no checking specified
 
+    # add custom dict words to spell checker
     for w in pwl:
         chkr.add(w)
 
@@ -38,7 +39,7 @@ def enum_errs(cleaned_text,g="",cs=""):
     #print "#Total spelling errors for file: " + str(cleaned_text) + ": " + str(tot_sp)
     if g == "-g":
         for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', f_str):
-            time.sleep(1)
+            time.sleep(1) # atd api only accepts requests max once every second
             errors = ATD.checkGrammar(sentence)
             for err in errors:
                 if err.type == "grammar":
@@ -47,6 +48,7 @@ def enum_errs(cleaned_text,g="",cs=""):
                     tot_gm += 1
         #print "#Total grammatical errors for file: " + sys.argv[1] + ": " + str(tot_gm)
 
+    pwl.close()
     f.close()
     return tot_sp, tot_gm
 

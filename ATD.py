@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """ ATD module
-helper classes and methods for playing with After The Deadline service
 See http://www.afterthedeadline.com/api.slp for the API documentation.
 
 Usage example:
@@ -11,9 +10,6 @@ for error in errs:
     print "description: %s" % error.description
     for suggestion in error.suggestions:
         print "suggestion: %s" % suggestion
-
-Created by Miguel Ventura
-License: MIT
 """
 import httplib
 import urllib
