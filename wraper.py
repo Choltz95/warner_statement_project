@@ -12,7 +12,7 @@ data: directory containing forms
 -c: todo get #cores from command line
 """
 def usage():
-    print "usage: python wraper.py <data/>{mandatory} <-g>{optional} <-uc>{coptional} <-c cores>{optional}"
+    print "usage: python wraper.py <data/>{mandatory} <-g>{optional} <-uc>{optional} <-c cores>{optional}"
 
 def argparse(argv):
     if len(sys.argv) < 2:
