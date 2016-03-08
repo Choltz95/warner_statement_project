@@ -4,51 +4,69 @@ import re
 import string
 import enchant
 import time
-import ATD
-ATD.setDefaultKey("warner_findoc_research")
+import multiprocessing as mp
+from functools import partial
 from enchant.checker import *
+import python_ginger_api as ginger
 
-def enum_errs(cleaned_text,g="",cs=""):
+cleaned_text = ""
+chkr = SpellChecker("en_US")
+def eval_sentence(sentence,g="",cs=""):
+    text = ""
+    tot_sp = 0
+    tot_gm = 0
+    if g == "-g":
+        result = ginger.wrap(sentence)
+        if result != -1:
+            tot_gm += result
+    for word in sentence.split():
+        if re.search('[a-zA-Z]', word) and len(word) > 1 and word.find(".com") == -1:
+            text += word
+            text += " "
+    chkr.set_text(text)
+    for err in chkr:
+ #       with open(cleaned_text+ ".log","a+") as log_f:
+        if err.word[0].isupper() == False:
+#                log_f.write("spelling error for: " + "**"+err.word+"**\n")
+            tot_sp += 1
+        else:
+            if cs == "-uc":
+#                    log_f.write("spelling error for: " + "**"+err.word+"**\n")
+                tot_sp += 1
+    return tot_sp,tot_gm
+
+def enum_errs(clean_f,g="",cs=""):
+    global cleaned_text
+    global chkr
+    cleaned_text = clean_f
     f = open(cleaned_text)
     f_str = f.read()
-    f.seek(0)
-    pwl = open("custom_dict.txt")
-    chkr = SpellChecker("en_US")
+    f.close()
+
     tot_sp = 0 # spelling errors
     tot_gm = -1 # grammatical errors -1 if no checking specified
 
     # add custom dict words to spell checker
-    for w in pwl:
-        chkr.add(w)
+    with open("custom_dict.txt") as pwl:
+        for w in pwl:
+            chkr.add(w)
 
-    text = ""
-    for line in f:
-        for word in line.split():
-            if re.search('[a-zA-Z]', word) and len(word) > 1 and word.find(".com") == -1:
-                text += word
-                text += " "
-    chkr.set_text(text)
-    for err in chkr:
-        if err.word[0].isupper() == False:
-            with open(cleaned_text + ".log", "a+") as f:
-                f.write("spelling error for: " + "**"+err.word+"**\n")
-            tot_sp += 1
-        else:
-            if cs != "":
-                f.write("spelling error for: " + "**"+err.word+"**\n")
-    #print "#Total spelling errors for file: " + str(cleaned_text) + ": " + str(tot_sp)
-    if g == "-g":
-        for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', f_str):
-            time.sleep(1) # atd api only accepts requests max once every second
-            errors = ATD.checkGrammar(sentence)
-            for err in errors:
-                if err.type == "grammar":
-                    with open(cleaned_text + ".log", "a+") as f:
-                        f.write("%s error for: %s **%s**\n" % (err.type, err.precontext, err.string))
-                    tot_gm += 1
-        #print "#Total grammatical errors for file: " + sys.argv[1] + ": " + str(tot_gm)
+    CORES = mp.cpu_count()
+    pool = mp.Pool(processes = CORES)
+    eval_sentence_p = partial(eval_sentence,g=g,cs=cs)
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', f_str)
 
-    pwl.close()
-    f.close()
+    S = pool.map_async(eval_sentence_p,sentences)
+    S = S.get(200)
+    pool.close()
+    pool.join()
+
+    tot_sp = sum([pair[0] for pair in S])
+    tot_gm = sum([pair[1] for pair in S]) if g == "-g" else -1
+    """
+    for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', f_str):
+        result = eval_sentence(sentence, g, cs)
+        tot_sp += result[0]
+        tot_gm += result[1]
+    """
     return tot_sp, tot_gm
-

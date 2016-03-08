@@ -54,7 +54,7 @@ if __name__ == "__main__":
 #        run_map(data,encoding,baseurl)
 
         ##parallelized solution from functools import partial
-        CORES = 8
+        CORES = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes = CORES)
         run_map_p = partial(run_map,encoding = encoding,baseurl = baseurl)
         division = file_len/CORES

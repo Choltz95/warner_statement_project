@@ -50,7 +50,7 @@ def main():
                 f.write(subprocess.check_output(cmd, shell=True))
 
             print "counting errors..."
-            sp_cnt,gm_cnt = count_errors.enum_errs("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",g)
+            sp_cnt,gm_cnt = count_errors.enum_errs("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
             baseline = baseline + (sp_cnt,gm_cnt,)
             print baseline
 
