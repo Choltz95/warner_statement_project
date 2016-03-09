@@ -7,39 +7,51 @@ import time
 import multiprocessing as mp
 from functools import partial
 from enchant.checker import *
-import python_ginger_api as ginger
+#import python_ginger_api as ginger
+import language_check
+import codecs
 
 cleaned_text = ""
 chkr = SpellChecker("en_US")
+tool = language_check.LanguageTool('en-US')
 def eval_sentence(sentence,g="",cs=""):
     text = ""
     tot_sp = 0
     tot_gm = 0
     if g == "-g":
-        result = ginger.wrap(sentence)
-        if result != -1:
-            tot_gm += result
+        if len(sentence) < 200:
+            matches = tool.check(sentence)
+            if len(matches) > 0:
+                with open(cleaned_text+ ".gm_log","a+") as log_f:
+                    for match in matches:
+                        log_f.write("spelling error for: **\n")+str(match.ruleId)+"**\n")
+            tot_gm += len(matches)
+    #    result = ginger.wrap(sentence)
+    #    if result != -1:
+    #        tot_gm += result
     for word in sentence.split():
-        if re.search('[a-zA-Z]', word) and len(word) > 1 and word.find(".com") == -1:
-            text += word
+        if re.search('[a-zA-Z]', word) and len(word) > 1 and len(word) < 34 and word.find(".com") == -1:
+            text += word.encode('ascii','ignore')
             text += " "
     chkr.set_text(text)
     for err in chkr:
- #       with open(cleaned_text+ ".log","a+") as log_f:
-        if err.word[0].isupper() == False:
-#                log_f.write("spelling error for: " + "**"+err.word+"**\n")
-            tot_sp += 1
-        else:
-            if cs == "-uc":
-#                    log_f.write("spelling error for: " + "**"+err.word+"**\n")
+        with open(cleaned_text+ ".sp_log","a+") as log_f:
+            if err.word[0].isupper() == False:
+                log_f.write("spelling error for: " + "**"+err.word+"**\n")
                 tot_sp += 1
+            else:
+                if cs == "-uc":
+                    log_f.write("spelling error for: " + "**"+err.word+"**\n")
+                    tot_sp += 1
     return tot_sp,tot_gm
 
 def enum_errs(clean_f,g="",cs=""):
     global cleaned_text
     global chkr
+    global tool
     cleaned_text = clean_f
-    f = open(cleaned_text)
+    #f = open(cleaned_text)
+    f = codecs.open(cleaned_text,"r","utf-8")
     f_str = f.read()
     f.close()
 

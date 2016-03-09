@@ -58,6 +58,7 @@ def wrap(text):
         return -1 # no more than 600 characters
     results = get_ginger_result(text)
 
+    #print text + "\n"
     # Correct grammar
     if(not results["LightGingerTheTextResult"]):
         return 0

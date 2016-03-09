@@ -112,15 +112,17 @@ def main():
     """main function"""
     original_text = " ".join(sys.argv[1:])
     if len(original_text) > 600:
-        print("You can't check more than 600 characters at a time.")
-        quit()
+        return -1
+        #print("You can't check more than 600 characters at a time.")
+        #quit()
     fixed_text = original_text
     results = get_ginger_result(original_text)
 
     # Correct grammar
     if(not results["LightGingerTheTextResult"]):
-        print("Good English :)")
-        quit()
+        #print("Good English :)")
+        return 0
+       # quit()
 
     # Incorrect grammar
     color_gap, fixed_gap = 0, 0
@@ -140,10 +142,10 @@ def main():
             color_gap += gap
             fixed_gap += to_index-from_index-len(suggest)
 
-    print len(results["LightGingerTheTextResult"])
+
     print("from: " + original_text)
     print("to:   " + fixed_text)
-
+    return 1
 
 if __name__ == '__main__':
     main()
