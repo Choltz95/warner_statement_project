@@ -24,14 +24,14 @@ def eval_sentence(sentence,g="",cs=""):
             if len(matches) > 0:
                 with open(cleaned_text+ ".gm_log","a+") as log_f:
                     for match in matches:
-                        log_f.write("spelling error for: **\n")+str(match.ruleId)+"**\n")
+                        log_f.write("spelling error for: **\n"+str(match.ruleId)+"**\n")
             tot_gm += len(matches)
     #    result = ginger.wrap(sentence)
     #    if result != -1:
     #        tot_gm += result
     for word in sentence.split():
         if re.search('[a-zA-Z]', word) and len(word) > 1 and len(word) < 34 and word.find(".com") == -1:
-            text += word.encode('ascii','ignore')
+            text += word.encode("utf-8")#word.encode('ascii','ignore')
             text += " "
     chkr.set_text(text)
     for err in chkr:

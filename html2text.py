@@ -5,6 +5,7 @@ import urlparse
 import HTMLParser
 from functools import partial
 from bs4 import BeautifulSoup
+import codecs
 """
 mapping from html data, encoding type, possible url to de-tagged html
 """
@@ -49,7 +50,7 @@ if __name__ == "__main__":
         if len(args) > 2:
             p.error('Too many arguments')
 
-        data = open(file_, 'rb').read()
+        data = codecs.open(file_, 'rb','utf-8').read() ######
         file_len = len(data)
 #        run_map(data,encoding,baseurl)
 
@@ -73,7 +74,7 @@ if __name__ == "__main__":
         replace_mapping = {'\n':' ', '\t':' ', '*':' '}
         page = ""
         for line in ''.join(S):
-            parse_lib.unescape(line)
+            line = parse_lib.unescape(line)
             for k, v in replace_mapping.iteritems():
                 line = line.replace(k, v)
             # filter out custom phrases
