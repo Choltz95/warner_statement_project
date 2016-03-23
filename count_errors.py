@@ -35,12 +35,14 @@ def eval_sentence(sentence,g="",cs=""):
             text += " "
     chkr.set_text(text)
     for err in chkr:
-        with open(cleaned_text+ ".sp_log","a+") as log_f:
+        with open(cleaned_text+ ".sp_log","a+") as log_f,open("sp_log","a+") as log_a:
             if err.word[0].isupper() == False:
+                log_a.write(err.word+" ")
                 log_f.write("spelling error for: " + "**"+err.word+"**\n")
                 tot_sp += 1
             else:
                 if cs == "-uc":
+                    log_a.write(err.word+" ")
                     log_f.write("spelling error for: " + "**"+err.word+"**\n")
                     tot_sp += 1
     return tot_sp,tot_gm

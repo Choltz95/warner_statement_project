@@ -5,6 +5,7 @@ import urlparse
 import HTMLParser
 from functools import partial
 from bs4 import BeautifulSoup
+import re
 import codecs
 """
 mapping from html data, encoding type, possible url to de-tagged html
@@ -51,8 +52,8 @@ if __name__ == "__main__":
             p.error('Too many arguments')
 
         data = codecs.open(file_, 'rb','utf-8').read() ######
+        data = re.sub(re.compile(r'-----BEGIN(.*?)</SEC-HEADER>', re.DOTALL),'', data)
         file_len = len(data)
-#        run_map(data,encoding,baseurl)
 
         ##parallelized solution from functools import partial
         CORES = multiprocessing.cpu_count()
@@ -82,6 +83,5 @@ if __name__ == "__main__":
                 filter(lambda x: x in string.printable, line)
             page+=line
         print page
-
     else:
         p.error("Too few arguments")
