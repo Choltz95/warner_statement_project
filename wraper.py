@@ -4,7 +4,7 @@ import os
 import csv
 import parse_lib
 import count_errors
-from sets import set
+#from sets import set
 
 """
 data: directory containing forms
@@ -38,11 +38,11 @@ def main():
         csv_out = csv.writer(f)
         if os.stat(f.name).st_size == 0:
             csv_out.writerow(["fname","sic","filing type", "filing date", "date", "cname", "length", "sp errors", "gm errors"])
-    with open("file_log", "r") as f_log:
+#    with open("file_log", "r") as f_log:
         # do stuff
-        for line in f_log:
-
-        print "f_log open"
+        #for line in f_log:
+		
+        #print "f_log open"
     for report in os.listdir(data_dir):
         file_dir = data_dir + "/" + report
         # ignore some temporary text files

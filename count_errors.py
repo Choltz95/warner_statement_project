@@ -24,7 +24,7 @@ def eval_sentence(sentence,g="",cs=""):
             if len(matches) > 0:
                 with open(cleaned_text+ ".gm_log","a+") as log_f:
                     for match in matches:
-                        log_f.write("spelling error for: **\n"+str(match.ruleId)+"**\n")
+                        log_f.write("grammatical error for: **\n"+str(match.ruleId)+"**\n")
             tot_gm += len(matches)
     #    result = ginger.wrap(sentence)
     #    if result != -1:
