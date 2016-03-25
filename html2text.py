@@ -7,6 +7,7 @@ from functools import partial
 from bs4 import BeautifulSoup
 import re
 import codecs
+import sys
 """
 mapping from html data, encoding type, possible url to de-tagged html
 """
@@ -25,7 +26,8 @@ def run_map(data, encoding, baseurl):
 #    wrapwrite(html2text(data,baseurl))
     return parse_lib.html2text(data,baseurl)
 
-if __name__ == "__main__":
+def main():
+    sys.setrecursionlimit(1500)
     baseurl = ''
     p = optparse.OptionParser('%prog [(filename|url) [encoding]]')
     p.add_option("-d", "--dash-unordered-list", action="store_true", dest="ul_style_dash",
@@ -65,8 +67,12 @@ if __name__ == "__main__":
         divide_file = [data[i:i+division] for i in xrange(0,file_len,division)]
         process_list = map(str,divide_file)
 
-        S = pool.map_async(run_map_p,process_list)
-        S = S.get(10)
+	S = pool.map_async(run_map_p,process_list)
+	try:
+            S = S.get(10)
+	except:
+	    print "max recursion depth reached"
+	    return 1
         pool.close()
         pool.join()
         S = [s for substring in S for s in substring] # flatten list
@@ -83,5 +89,9 @@ if __name__ == "__main__":
                 filter(lambda x: x in string.printable, line)
             page+=line
         print page
+	return page
     else:
         p.error("Too few arguments")
+
+#if __name__ == "main__":
+main()

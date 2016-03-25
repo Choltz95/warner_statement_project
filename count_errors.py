@@ -6,13 +6,16 @@ import enchant
 import time
 import multiprocessing as mp
 from functools import partial
+from enchant import DictWithPWL
 from enchant.checker import *
 #import python_ginger_api as ginger
 import language_check
 import codecs
 
 cleaned_text = ""
-chkr = SpellChecker("en_US")
+d = DictWithPWL("en_US","words")
+#chkr = SpellChecker("en_US")
+chkr = SpellChecker(d)
 tool = language_check.LanguageTool('en-US')
 def eval_sentence(sentence,g="",cs=""):
     text = ""
@@ -24,8 +27,10 @@ def eval_sentence(sentence,g="",cs=""):
             if len(matches) > 0:
                 with open(cleaned_text+ ".gm_log","a+") as log_f:
                     for match in matches:
-                        log_f.write("grammatical error for: **\n"+str(match.ruleId)+"**\n")
-            tot_gm += len(matches)
+		    	if str(match.ruleId) != "WHITESPACE_RULE":
+                            log_f.write("grammatical error for: **\n"+str(match.ruleId)+"**\n")
+			    tot_gm += 1	
+#tot_gm += len(matches)
     #    result = ginger.wrap(sentence)
     #    if result != -1:
     #        tot_gm += result

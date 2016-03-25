@@ -4,7 +4,6 @@ import os
 import csv
 import parse_lib
 import count_errors
-#from sets import set
 
 """
 data: directory containing forms
@@ -54,9 +53,9 @@ def main():
                 f_log.write(baseline[0] + "\n")
             with open("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
                 print "cleaning text..."
-                cmd = "python html2text.py -b 0 " + file_dir
-                f.write(subprocess.check_output(cmd, shell=True))
-
+       		cmd = ["python","html2text.py","-b","0",file_dir]#"python html2text.py -b 0 " + file_dir	
+		#f.write(subprocess.check_output(cmd, shell=True))
+		f.write(subprocess.check_output(cmd))
             print "counting errors..."
             sp_cnt,gm_cnt = count_errors.enum_errs("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
             baseline = baseline + (sp_cnt,gm_cnt,)
