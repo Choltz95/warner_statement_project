@@ -29,20 +29,23 @@ def main():
     cleaned_text = ""
     baseline = ()
     data_dir,g,uc,c = argparse(sys.argv)
+    files = set()
 
     if not os.path.exists("result"):
-        os.makedirs("result")
-
+        os.makedirs("result") 
     with open("result/" + "log" + ".csv",'w') as f:
         csv_out = csv.writer(f)
         if os.stat(f.name).st_size == 0:
             csv_out.writerow(["fname","sic","filing type", "filing date", "date", "cname", "length", "sp errors", "gm errors"])
-#    with open("file_log", "r") as f_log:
-        # do stuff
-        #for line in f_log:
-		
-        #print "f_log open"
+    if os.path.isfile("file_log"):
+        with open("file_log", "r") as f_log:
+            # do stuff
+	    for line in f_log:
+	        files.add(line.rstrip())	
+            #print "f_log open"
     for report in os.listdir(data_dir):
+        if report.rstrip() in files: # file already parsed previously
+	    continue
         file_dir = data_dir + "/" + report
         # ignore some temporary text files
         if report == "error_log.txt" or report == "custom_dict.txt" or report == "sp_test.txt":
@@ -50,12 +53,18 @@ def main():
         if report.endswith(".txt"):
             baseline = parse_lib.parse_file_meta(file_dir)
             with open("file_log",'a+') as f_log:
-                f_log.write(baseline[0] + "\n")
+                f_log.write(baseline[0].rstrip() + "\n")
             with open("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
                 print "cleaning text..."
        		cmd = ["python","html2text.py","-b","0",file_dir]#"python html2text.py -b 0 " + file_dir	
 		#f.write(subprocess.check_output(cmd, shell=True))
-		f.write(subprocess.check_output(cmd))
+		output = subprocess.check_output(cmd)
+		if output.rstrip() == "ERR_RECUR":
+		    print "ERR_RECUR"
+		    continue
+		else:
+		    f.write(output)
+		#f.write(subprocess.check_output(cmd))
             print "counting errors..."
             sp_cnt,gm_cnt = count_errors.enum_errs("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
             baseline = baseline + (sp_cnt,gm_cnt,)

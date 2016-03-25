@@ -71,7 +71,7 @@ def main():
 	try:
             S = S.get(10)
 	except:
-	    print "max recursion depth reached"
+	    print "ERR_RECUR"
 	    return 1
         pool.close()
         pool.join()
