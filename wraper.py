@@ -31,9 +31,9 @@ def main():
     data_dir,g,uc,c = argparse(sys.argv)
     files = set()
 
-    if not os.path.exists("result"):
-        os.makedirs("result") 
-    with open("result/" + "log" + ".csv",'w') as f:
+    if not os.path.exists("log"):
+        os.makedirs("log") 
+    with open("log/" + "log" + ".csv",'w') as f:
         csv_out = csv.writer(f)
         if os.stat(f.name).st_size == 0:
             csv_out.writerow(["fname","sic","filing type", "filing date", "date", "cname", "length", "sp errors", "gm errors"])
@@ -54,23 +54,27 @@ def main():
             baseline = parse_lib.parse_file_meta(file_dir)
             with open("file_log",'a+') as f_log:
                 f_log.write(baseline[0].rstrip() + "\n")
-            with open("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
+            with open("log/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
                 print "cleaning text..."
        		cmd = ["python","html2text.py","-b","0",file_dir]#"python html2text.py -b 0 " + file_dir	
 		#f.write(subprocess.check_output(cmd, shell=True))
 		output = subprocess.check_output(cmd)
 		if output.rstrip() == "ERR_RECUR":
-		    print "ERR_RECUR"
+		    baseline = baseline + ("ERR_RECUR","ERR_RECUR")
+		    print baseline
+		    with open("log/log.csv" ,'a+') as f:
+		        csv_out=csv.writer(f)
+			csv_out.writerow(baseline)
 		    continue
 		else:
 		    f.write(output)
 		#f.write(subprocess.check_output(cmd))
             print "counting errors..."
-            sp_cnt,gm_cnt = count_errors.enum_errs("result/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
+            sp_cnt,gm_cnt = count_errors.enum_errs("log/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
             baseline = baseline + (sp_cnt,gm_cnt,)
             print baseline
 
-        with open("result/" + "log" + ".csv",'a+') as f:
+        with open("log/log.csv",'a+') as f:
             csv_out = csv.writer(f)
             csv_out.writerow(baseline)
 
