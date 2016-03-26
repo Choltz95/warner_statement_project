@@ -703,8 +703,8 @@ def parse_file_meta(fullpath):
                 file_date=r''
 
         #Company Name
-        try:
-                fmt = r'(?sm)COMPANY CONFORMED NAME:\s+(.*)CENTRAL INDEX KEY'
+        try: # \n ?
+                fmt = r'(?sm)COMPANY CONFORMED NAME:\s+(.*?)CENTRAL INDEX KEY'
                 co_name =  re.findall(fmt,header,re.DOTALL)[0]
         except StandardError as e:
                 co_name=r''
@@ -731,8 +731,10 @@ def parse_file_meta(fullpath):
                 tbl = r'(?s)<TABLE>(.*?)</TABLE>'
         except StandardError as e:
                 tbl = r''
-
-        bod = re.findall(fmt,data,re.DOTALL)[0]
+	try:
+            bod = re.findall(fmt,data,re.DOTALL)[0]
+	except:
+	    bod = r''
 
         try:
                 table = re.findall(tbl,data,re.DOTALL)[0] #Get rid of table of contents to identify beginning of MDA section correctly

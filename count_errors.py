@@ -1,3 +1,10 @@
+"""
+count_errors.py
+counts spelling and grammatical errors for a given text
+ - splits text into list of sentences
+ - divide list and parallelizes computation for each sentence
+"""
+
 #coding UTF-8
 import sys
 import re
@@ -17,6 +24,7 @@ d = DictWithPWL("en_US","words")
 #chkr = SpellChecker("en_US")
 chkr = SpellChecker(d)
 tool = language_check.LanguageTool('en-US')
+
 def eval_sentence(sentence,g="",cs=""):
     text = ""
     tot_sp = 0
@@ -68,7 +76,8 @@ def enum_errs(clean_f,g="",cs=""):
     # add custom dict words to spell checker
     with open("custom_dict.txt") as pwl:
         for w in pwl:
-            chkr.add(w)
+	    if '#' not in w:
+		chkr.add(w)
 
     CORES = mp.cpu_count()
     pool = mp.Pool(processes = CORES)

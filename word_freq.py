@@ -1,3 +1,11 @@
+"""
+word_freq.py - change to stats.py 
+compute frequency of mispelled words
+
+TODO: 
+ - Generalize statistics, give lists of documents for which incorrect words appear
+"""
+
 from collections import defaultdict
 def main():
 	d = defaultdict(int)

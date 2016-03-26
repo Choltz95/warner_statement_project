@@ -1,3 +1,8 @@
+"""
+wraper.py
+driver program for processes to convert a given form into a plaintext corpus and derive syntactical and lexical errors.
+"""
+
 import sys
 import subprocess
 import os
@@ -32,10 +37,10 @@ def main():
     files = set()
 
     if not os.path.exists("log"):
-        os.makedirs("log") 
-    with open("log/" + "log" + ".csv",'w') as f:
-        csv_out = csv.writer(f)
-        if os.stat(f.name).st_size == 0:
+        os.makedirs("log")
+    if not os.path.isfile("log/log.csv"):
+        with open("log/" + "log" + ".csv",'w') as f:
+            csv_out = csv.writer(f)
             csv_out.writerow(["fname","sic","filing type", "filing date", "date", "cname", "length", "sp errors", "gm errors"])
     if os.path.isfile("file_log"):
         with open("file_log", "r") as f_log:
@@ -44,21 +49,27 @@ def main():
 	        files.add(line.rstrip())	
             #print "f_log open"
     for report in os.listdir(data_dir):
-        if report.rstrip() in files: # file already parsed previously
+        if os.path.splitext(report)[0] in files: # file already parsed previously
 	    continue
         file_dir = data_dir + "/" + report
-        # ignore some temporary text files
-        if report == "error_log.txt" or report == "custom_dict.txt" or report == "sp_test.txt":
-            continue;
+    
         if report.endswith(".txt"):
-            baseline = parse_lib.parse_file_meta(file_dir)
-            with open("file_log",'a+') as f_log:
+            try:
+	        baseline = parse_lib.parse_file_meta(file_dir)
+	    except:
+	        continue
+  	    if baseline[0] == '':
+	        continue
+	    with open("file_log",'a+') as f_log:
                 f_log.write(baseline[0].rstrip() + "\n")
             with open("log/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
-                print "cleaning text..."
-       		cmd = ["python","html2text.py","-b","0",file_dir]#"python html2text.py -b 0 " + file_dir	
-		#f.write(subprocess.check_output(cmd, shell=True))
-		output = subprocess.check_output(cmd)
+                #print "cleaning text..."
+       		cmd = ["python","html2text.py","-b","0",file_dir]	
+		try:
+		    output = subprocess.check_output(cmd)
+		except subprocess.CalledProcessError as e:
+		    print e.output
+		    continue
 		if output.rstrip() == "ERR_RECUR":
 		    baseline = baseline + ("ERR_RECUR","ERR_RECUR")
 		    print baseline
@@ -68,13 +79,12 @@ def main():
 		    continue
 		else:
 		    f.write(output)
-		#f.write(subprocess.check_output(cmd))
-            print "counting errors..."
+            #print "counting errors..."
             sp_cnt,gm_cnt = count_errors.enum_errs("log/" + os.path.splitext(report)[0] + "_processed" + ".txt",g,uc)
             baseline = baseline + (sp_cnt,gm_cnt,)
             print baseline
 
-        with open("log/log.csv",'a+') as f:
+        with open("log/log.csv",'a') as f:
             csv_out = csv.writer(f)
             csv_out.writerow(baseline)
 

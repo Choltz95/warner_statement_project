@@ -9,6 +9,15 @@ data: directory containing forms <br />
 -uc: set flag if case sensitivity (caped words checked) <br />
 -c: todo get #cores from command line
 
+## Files
+
+#Program
+
+#Utility scripts
+
 ## References 
 After the Deadline (http://www.afterthedeadline.com/api.slp)
+
 pyenchant(1.6.6) (http://pythonhosted.org/pyenchant/tutorial.html)
+
+language-tool
