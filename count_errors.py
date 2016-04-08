@@ -74,10 +74,10 @@ def enum_errs(clean_f,g="",cs=""):
     tot_gm = -1 # grammatical errors -1 if no checking specified
 
     # add custom dict words to spell checker
-    with open("custom_dict.txt") as pwl:
-        for w in pwl:
-	    if '#' not in w:
-		chkr.add(w)
+#    with open("custom_dict.txt") as pwl:
+#        for w in pwl:
+#	    if '#' not in w:
+#		chkr.add(w)
 
     CORES = mp.cpu_count()
     pool = mp.Pool(processes = CORES)

@@ -1,4 +1,4 @@
 #!/bin/bash
-mv sp_log backup
-mv file_log backup
-mv log/ backup
+cp sp_log backup
+cp file_log backup
+cp -r log/ backup

@@ -60,7 +60,7 @@ def main():
 	        continue
   	    if baseline[0] == '':
 	        continue
-	    with open("file_log",'a+') as f_log:
+	    with open("file_log",'a') as f_log:
                 f_log.write(baseline[0].rstrip() + "\n")
             with open("log/" + os.path.splitext(report)[0] + "_processed" + ".txt",'w') as f:
                 #print "cleaning text..."
@@ -73,7 +73,7 @@ def main():
 		if output.rstrip() == "ERR_RECUR":
 		    baseline = baseline + ("ERR_RECUR","ERR_RECUR")
 		    print baseline
-		    with open("log/log.csv" ,'a+') as f:
+		    with open("log/log.csv" ,'a') as f:
 		        csv_out=csv.writer(f)
 			csv_out.writerow(baseline)
 		    continue
