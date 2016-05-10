@@ -22,7 +22,7 @@ def average_col(csv_path):
     return averages
 
 def main():
-    log_path = "log.csv"
+    log_path = "log/log.csv"
     lines = 0.0
     cnt = 0.0
     with open(log_path) as f:
@@ -33,5 +33,6 @@ def main():
                 cnt += 1
     averages = average_col(log_path)
     print "spelling_errors,grammar_errors"
-    print str(averages[-1]) + "," + str(averages[-2])
+    print str(averages[-2]) + "," + str(averages[-1])
+    print str(cnt/lines)
 main()
