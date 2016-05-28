@@ -87,6 +87,6 @@ def main():
         with open("log/log.csv",'a') as f:
             csv_out = csv.writer(f)
             csv_out.writerow(baseline)
-
+	os.remove("log/" + os.path.splitext(report)[0] + "_processed" + ".txt")
 if __name__ == "__main__":
     main()
