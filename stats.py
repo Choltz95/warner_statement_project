@@ -1,5 +1,12 @@
+"""
+word_freq.py - change to stats.py 
+compute frequency of mispelled words
+
+TODO: 
+ - Generalize statistics, give lists of documents for which incorrect words appear
+"""
 import csv
-from collections import Counter
+from collections import Counter, defaultdict
 
 def average_col(csv_path):
     col_totals = Counter()
@@ -34,5 +41,7 @@ def main():
     averages = average_col(log_path)
     print "spelling_errors,grammar_errors"
     print str(averages[-2]) + "," + str(averages[-1])
+    print "percent error (unparsed)"
     print str(cnt/lines)
+    
 main()

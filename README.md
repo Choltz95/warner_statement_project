@@ -10,7 +10,7 @@ python wraper.py <`data/>{mandatory} <-g>{optional} <-uc>{optional} <-c #cores>{
 **-c**: todo get #cores from command line
 
 ## Files & Directories
-**readme.md**: This file
+**readme.md**: This file <br />
 **simon\_school\_collab\_tr.pdf**: First technical report produced detailing approach <br />
 
 **words**: The Unix words file composes the foundation for our wordlist.[3] <br />
