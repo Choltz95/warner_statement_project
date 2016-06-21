@@ -79,8 +79,8 @@ python wraper.py <`data/>{mandatory} <-g>{optional} <-uc>{optional} <-c #cores>{
 ##TODO and future topics
 A large number words used in the Form 10-Ks include the names of corporations, the names of people, and the names of places. 
 Currently, we manually add these names to our wordlist, but named-entity recognition is an area of natural language processing
-which deas with extracting and classifying named entitities. There exist a number of approaches to implementing a system to do this,
-and further research could be done on finding existing systems or implementing our own.
+which deals with extracting and classifying named entitities. There exist a number of approaches to implementing a named-entity 
+recognition system, and further research could be done on finding existing systems or implementing our own.
 
 ## References 
 [depreciated]After the Deadline http://www.afterthedeadline.com/api.slp <br />
