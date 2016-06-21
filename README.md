@@ -11,7 +11,8 @@ python wraper.py <`data/>{mandatory} <-g>{optional} <-uc>{optional} <-c #cores>{
 
 ## Files & Directories
 **readme.md**: This file <br />
-**simon\_school\_collab\_tr.pdf**: First technical report produced detailing approach <br />
+**[simon\_school\_collab\_tr.pdf](simon_school_collab_tr.pdf
+)**: First technical report produced detailing approach <br />
 
 **words**: The Unix words file composes the foundation for our wordlist.[3] <br />
 **loughran_mcdonald.txt**: Form 10-K specific dictionary  compiled through research done by Bill McDonald and Tim Loughran.[1] <br />
