@@ -20,7 +20,7 @@ import language_check
 import codecs
 
 cleaned_text = ""
-d = DictWithPWL("en_US","words")
+d = DictWithPWL("en_US","dict")
 #chkr = SpellChecker("en_US")
 chkr = SpellChecker(d)
 tool = language_check.LanguageTool('en-US')
@@ -38,10 +38,7 @@ def eval_sentence(sentence,g="",cs=""):
 		    	if str(match.ruleId) != "WHITESPACE_RULE":
                             log_f.write("grammatical error for: **\n"+str(match.ruleId)+"**\n")
 			    tot_gm += 1	
-#tot_gm += len(matches)
-    #    result = ginger.wrap(sentence)
-    #    if result != -1:
-    #        tot_gm += result
+
     for word in sentence.split():
         if re.search('[a-zA-Z]', word) and len(word) > 1 and len(word) < 34 and word.find(".com") == -1:
             text += word.encode("utf-8")#word.encode('ascii','ignore')

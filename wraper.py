@@ -18,18 +18,23 @@ data: directory containing forms
 """
 def usage():
     print "usage: python wraper.py <data/>{mandatory} <-g>{optional} <-uc>{optional} <-c cores>{optional}"
-
+    
+"""
+Parse and return command line arguments
+"""
 def argparse(argv):
     if len(sys.argv) < 2:
         usage()
         sys.exit(1)
-    #data_dir = r'/run/media/choltz2/My Passport/GJZ3'
     data_dir = sys.argv[1]
     g = "-g" if "-g" in sys.argv else ""
     uc = "-uc" if "-uc" in sys.argv else ""
     c = 4
     return data_dir,g,uc,c
 
+"""
+Entry point
+"""
 def main():
     cleaned_text = ""
     baseline = ()
